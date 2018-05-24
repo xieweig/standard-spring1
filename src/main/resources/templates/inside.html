@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>simple_inside</title>
+<script src="jquery.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script> -->
+
+<style type="text/css">
+	.simple{ width:200px; height:120px; border:1px solid #00F} 
+</style>
+</head>
+<body>
+
+    <span th:text="${name}">unknown</span>
+    <ul>
+        <li th:each="item : ${list}" th:text="${item}">space</li>
+    </ul>
+
+	
+	<input id ="go" type="button" value = "go_show_all_codes" >
+	<div id ="show" class ="simple" ></div>
+	<input id ="goto" type="button" value = "goto_new_add" >
+	<div id= "test" class="simple"></div>
+	<div id= "store" class="simple"></div>
+	<input id ="goanother" type="button" value = "goanother" >
+	
+	<input id ="gofour" type="button" value = "gofour" >
+	
+	
+	<br/>
+	
+	<div id = "first">
+		<div id = "second">
+			<input type="text" id="user" name= "userName" placeholder="user vs userName"/>
+			<input type="password" id= "pwd" name="password" />
+		</div>
+		<input type="file" id ="file1" name = "file1" >
+	<!--  
+		<input type="file" id ="file2" name = "file2" multiple="multiple">
+	-->
+		<div id ="third">
+			<button>Ajax_file</button>
+			<button>Ajax_files</button>
+		</div>
+		<form action="/seventh" method="post" enctype="multipart/form-data">
+			<input type="text" id="title" name= "title" placeholder="no use now ,igonre me"/>
+			<input type="file" id ="file_form" name = "file_form"/>
+			<input type="submit" id="submit" name= "submit"/>
+		</form>
+	
+	</div>
+	
+
+    
+    
+    
+<script type="text/javascript">
+//goto 按钮点击后将为全局变量ｃｏｄｅｓ赋值
+var codes ="";
+$(document).ready(function(){
+	  $("#Ajax_files").click(function(){
+	
+		  $.ajax({
+			url: '/sixth',
+			type: 'post',
+			async: false,
+			dataType: 'html',
+			contentType: 'application/json',
+			data: JSON.stringify(a),
+			success: function(data) {
+				},
+			error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+	  $("#Ajax_file").click(function(){
+		  var form_data = new FormData();
+		  form_data.append("address","No1 Street");
+		  form_data.append("position","south");
+		  var file1 =$("#file1")[0].files[0];
+		  form_data.append("file1",file1);
+		  $.ajax({
+			url: '/fifth',
+			type: 'post',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: JSON.stringify(a),
+			success: function(data) {
+				},
+			error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+	  $("#gofour").click(function(){
+		  
+		  if(codes == ""){alert("null_codes.");}
+		  var a = codes.split(",");
+		  
+		  $.ajax({
+			url: '/fourth',
+			type: 'post',
+			async: false,
+			dataType: 'html',
+			contentType: 'application/json',
+			data: JSON.stringify(a),
+			success: function(data) {
+				},
+			error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+	  $("#goanother").click(function(){
+		  
+		  if(codes == ""){alert("null_codes.");}
+		  var a = codes.split(",");
+		  
+		  $.ajax({
+			url: '/third',
+			dataType: 'json',
+			type: 'post',
+			//async: true,
+			contentType: 'application/json',
+			/*data: {
+					"codes" : codes
+					},*/
+			data: JSON.stringify(a),
+			success: function(data) {
+					$.each(data, function(key, value){
+						console.log(key);
+						console.log(value);
+					});
+				},
+				error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+	  $("#go").click(function(){
+		  $.ajax({
+			url: '/second',
+			dataType: 'json',
+			type: 'post',
+			data: {},
+			success: function(data) {
+					$.each(data, function(index,element){
+						codes += (element + ",");
+					});
+					codes= codes.substr(0,codes.length-1);
+					$("#store").text(codes);
+					
+				},
+				error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+	  $("#goto").click(function(){
+		  $.ajax({
+			url: '/first',
+			dataType: 'json',
+			type: 'post',
+			
+			data:'jsondata => requestbody',
+			success: function(data) {
+					alert(data["id"]+"=="+data.id+"==>>"+data.memberCode);
+					var content ="";
+					for(var key in data){
+						content += (data[key]+"==>>");
+					}
+					 $("#show").text("Hello world!"+content);
+					 $("#test").text(data.id);		
+					//html()方法会解析标签　
+					//TEXT()原封不动
+					//val()只针对表单标签
+					 console.log($("#test").html()　== $("#test").text());
+					
+				},
+				error: function(xhr) {alert('error:' + JSON.stringify(xhr));}
+		});
+	  });
+});
+</script>
+</body>
+</html>

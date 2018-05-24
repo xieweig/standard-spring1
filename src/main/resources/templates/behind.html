@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>behind_simple</title>
+</head>
+<body>
+    <span th:text="${title}">unknown</span>
+    <ul>
+        <li th:each="item : ${codesContents}" th:text="${item}">space</li>
+    </ul>
+
+</body>
+</html>
